@@ -8,9 +8,12 @@
   
 <script type="text/javascript">
 
+// potential inspiration
+// https://practicingruby.com/articles/ant-colony-simulation
+
 var canvas = document.getElementById("canvas");
-var WIDTH = 100;
-var HEIGHT = 100;
+var WIDTH = 200;
+var HEIGHT = 200;
 
 /* BOARD */
 var Board = function(width, height, ctx) {
@@ -103,6 +106,7 @@ ants.push(new Ant());
 ants.push(new Ant());
 
 var tempGame = function() {
+  board.setBlack();
   for (var i = 0; i < ants.length; i++) {
     ants[i].moveRandom();
   }
@@ -115,6 +119,7 @@ var tempGame = function() {
 setInterval(tempGame, 50);
 
 var Key = {
+  // http://nokarma.org/2011/02/27/javascript-game-development-keyboard-input/
   pressed: {},
 
   LEFT: 37,
