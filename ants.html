@@ -66,6 +66,7 @@ var Ant = function(x, y, color) {
   this.x = x | Math.floor(Math.random() * WIDTH);
   this.y = y | Math.floor(Math.random() * HEIGHT);
   this.color = color | [0, 0, 0, 0];
+  //this.player = false;
 };
 
 Ant.prototype.move = function(dx, dy) {
@@ -79,29 +80,63 @@ Ant.prototype.moveRandom = function() {
   this.move(dx, dy);
 };
 
+Ant.prototype.update = function() {
+  // only call if player
+  if (Key.isDown(Key.UP)) this.move(0, -1);
+  if (Key.isDown(Key.LEFT)) this.move(-1, 0);
+  if (Key.isDown(Key.DOWN)) this.move(0, 1);
+  if (Key.isDown(Key.RIGHT)) this.move(1, 0);
+};
+
+
 
 board = new Board(WIDTH, HEIGHT, canvas.getContext("2d"));
 board.setBlack();
 
-//ant = new Ant();
+var player = new Ant();
+player.color = [0, 0, 255, 255]
 var ants = [];
 ants.push(new Ant());
-ants[0].color = [0, 0, 255, 255]
 ants.push(new Ant());
 ants.push(new Ant());
 ants.push(new Ant());
 ants.push(new Ant());
-
 
 var tempGame = function() {
   for (var i = 0; i < ants.length; i++) {
     ants[i].moveRandom();
   }
-  board.drawAnts(ants)
+  player.update();
+  board.drawAnts(ants);
+  board.drawAnt(player); // lame
   board.render();
 }
 
-setInterval(tempGame, 100);
+setInterval(tempGame, 50);
+
+var Key = {
+  pressed: {},
+
+  LEFT: 37,
+  UP: 38,
+  RIGHT: 39,
+  DOWN: 40,
+  
+  isDown: function(keyCode) {
+    return this.pressed[keyCode];
+  },
+  
+  onKeydown: function(event) {
+    this.pressed[event.keyCode] = true;
+  },
+  
+  onKeyup: function(event) {
+    delete this.pressed[event.keyCode];
+  }
+};
+
+window.addEventListener('keyup', function(event) { Key.onKeyup(event); }, false);
+window.addEventListener('keydown', function(event) { Key.onKeydown(event); }, false);
 
 </script>
   
