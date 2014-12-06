@@ -5,23 +5,12 @@
   <canvas id="canvas" position="absolute" left="0px" top="0px" width="500px", height="500px">no canvas?</canvas>
 </body>
 </html>
-
+  
 <script type="text/javascript">
-
-/*
-- make ant class
-- have list of ants
-- get them to move randomly
-- make something that will render them all
-- make a 'board' class or something, put setPixel, etc. in that
-*/
 
 var canvas = document.getElementById("canvas");
 var WIDTH = 100;
 var HEIGHT = 100;
-
-// create a new pixel array
-//var imageData = ctx.createImageData(WIDTH, HEIGHT);
 
 /* BOARD */
 var Board = function(width, height, ctx) {
@@ -59,7 +48,8 @@ Board.prototype.setBlack = function() {
 };
 
 Board.prototype.drawAnt = function(ant) {
-  this.setPixel(ant.x, ant.y, 1, 1, 1, 1);
+  var c = ant.color;
+  this.setPixel(ant.x, ant.y, c[0], c[1], c[2], c[3]);
 };
 
 Board.prototype.drawAnts = function(ants) {
@@ -67,14 +57,15 @@ Board.prototype.drawAnts = function(ants) {
 };
 
 Board.prototype.render = function() {
-  this.ctx.putImageData(this.img, 0, 0); // at coords 0,0
+  this.ctx.putImageData(this.img, 0, 0);
 };
 
 
 /* ANT */
-var Ant = function(x, y) {
+var Ant = function(x, y, color) {
   this.x = x | Math.floor(Math.random() * WIDTH);
   this.y = y | Math.floor(Math.random() * HEIGHT);
+  this.color = color | [0, 0, 0, 0];
 };
 
 Ant.prototype.move = function(dx, dy) {
@@ -92,23 +83,25 @@ Ant.prototype.moveRandom = function() {
 board = new Board(WIDTH, HEIGHT, canvas.getContext("2d"));
 board.setBlack();
 
-ant = new Ant();
-//var ants = [];
-//ants.push(new Ant());
+//ant = new Ant();
+var ants = [];
+ants.push(new Ant());
+ants[0].color = [0, 0, 255, 255]
+ants.push(new Ant());
+ants.push(new Ant());
+ants.push(new Ant());
+ants.push(new Ant());
 
 
 var tempGame = function() {
-  ant.moveRandom();
-  board.drawAnt(ant)
+  for (var i = 0; i < ants.length; i++) {
+    ants[i].moveRandom();
+  }
+  board.drawAnts(ants)
   board.render();
 }
 
 setInterval(tempGame, 100);
-
-
-
-
-
 
 </script>
   
